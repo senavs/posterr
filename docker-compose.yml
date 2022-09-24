@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+
+  database:
+    image: postgres
+    container_name: postter-database
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: POSTERR
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: toor
+    ports:
+      - "5432:5432"
+
+  backend:
+    image: poster-backend
+    container_name: poster-backend
+    build:
+      context: posterr
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      DEPLOY_DEBUG: "true"
+      DEPLOY_RELOAD: "true"
+      DATABASE_URI: 'postgresql://root:toor@database/POSTERR'
+    volumes:
+      - ./posterr/src:/posterr/src
+    depends_on:
+      - database
