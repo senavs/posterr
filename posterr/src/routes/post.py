@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from ..payloads.post import PublishPostBody, Post
-from ..services.post import create_post
+from ..modules.post import create_post
 
 router = APIRouter(prefix="/post")
 
