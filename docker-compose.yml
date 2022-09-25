@@ -26,5 +26,7 @@ services:
       DATABASE_URI: 'postgresql://root:toor@database/POSTERR'
     volumes:
       - ./posterr/src:/posterr/src
+    ports:
+      - "8888:8888"
     depends_on:
       - database
