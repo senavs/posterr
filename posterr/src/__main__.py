@@ -1,10 +1,10 @@
 import uvicorn
 
-from posterr.src import config
+from . import config
 
 if __name__ == '__main__':
     uvicorn.run(
-        "api:app",
+        "src:app",
         host=config.deploy.DEPLOY_HOST,
         port=config.deploy.DEPLOY_PORT,
         debug=config.deploy.DEPLOY_DEBUG,
