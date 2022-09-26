@@ -19,6 +19,10 @@ class Post(BaseSettings):
         extra: str = "ignore"
 
 
+class Posts(BaseSettings):
+    posts: list[Post]
+
+
 class PublishPostBody(BaseSettings):
     user_id: int
     content: str = Field(max_length=777)

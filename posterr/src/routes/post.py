@@ -1,9 +1,16 @@
-from fastapi import APIRouter
+from datetime import date
 
-from ..payloads.post import PublishPostBody, Post, RepostPostBody, QuotePostBody
-from ..modules.post import create_post, repost_post, quote_post
+from fastapi import APIRouter, Query
+
+from ..payloads.post import PublishPostBody, Post, RepostPostBody, QuotePostBody, Posts
+from ..modules.post import create_post, repost_post, quote_post, list_posts
 
 router = APIRouter(prefix="/post")
+
+
+@router.post("/list", response_model=Posts)
+def _list_posts(user_id: int = None, publish_at: date = None, page: int = 0, limit: int = Query(10, ge=0, le=10)):
+    return {"posts": list_posts(user_id, publish_at, page, limit)}
 
 
 @router.post("/publish", response_model=Post)

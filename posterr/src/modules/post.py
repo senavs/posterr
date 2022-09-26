@@ -1,5 +1,5 @@
-import logging
 from datetime import datetime
+from typing import Optional
 
 from sqlalchemy import extract
 from starlette.exceptions import HTTPException
@@ -14,12 +14,35 @@ DAILY_POST_LIMIT = 5
 
 def count_daily_published_post(user_id: int, *, connection: DatabaseClient = None) -> int:
     today = datetime.today()
-    return connection.query(Post).filter(
-        Post.USER_ID == user_id,
-        extract('month', Post.CREATED_AT) >= today.month,
-        extract('year', Post.CREATED_AT) >= today.year,
-        extract('day', Post.CREATED_AT) >= today.day
-    ).count()
+    with DatabaseClient(connection=connection) as connection:
+        return connection.query(Post).filter(
+            Post.USER_ID == user_id,
+            extract('month', Post.CREATED_AT) >= today.month,
+            extract('year', Post.CREATED_AT) >= today.year,
+            extract('day', Post.CREATED_AT) >= today.day
+        ).count()
+
+
+def list_posts(user_id: Optional[int] = None,
+               start_date: Optional[datetime] = None,
+               skip: int = None,
+               limit: int = None, *,
+               connection: DatabaseClient = None) -> list[dict]:
+    with DatabaseClient(connection=connection) as connection:
+        query = connection.query(Post)
+        if user_id:
+            query = query.filter(Post.USER_ID == user_id)
+        if start_date:
+            query = query.filter(
+                extract('month', Post.CREATED_AT) >= start_date.month,
+                extract('year', Post.CREATED_AT) >= start_date.year,
+                extract('day', Post.CREATED_AT) >= start_date.day
+            )
+        if skip:
+            query = query.offset(skip * limit)
+        if limit:
+            query = query.limit(limit)
+        return [post.to_dict() for post in query.all()]
 
 
 def search_post_or_404(post_id: int, *, connection: DatabaseClient = None) -> Post:
