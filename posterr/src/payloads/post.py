@@ -1,12 +1,12 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseSettings, Field
+from pydantic import Field, BaseModel
 
 from ..payloads.user import User
 
 
-class Post(BaseSettings):
+class Post(BaseModel):
     post_id: int
     content: Optional[str] = Field(max_length=777)
     reposted: bool
@@ -19,21 +19,21 @@ class Post(BaseSettings):
         extra: str = "ignore"
 
 
-class Posts(BaseSettings):
+class Posts(BaseModel):
     posts: list[Post]
 
 
-class PublishPostBody(BaseSettings):
+class PublishPostBody(BaseModel):
     user_id: int
     content: str = Field(max_length=777)
 
 
-class RepostPostBody(BaseSettings):
+class RepostPostBody(BaseModel):
     user_id: int
     post_id: int
 
 
-class QuotePostBody(BaseSettings):
+class QuotePostBody(BaseModel):
     user_id: int
     post_id: int
     content: str = Field(max_length=777)
