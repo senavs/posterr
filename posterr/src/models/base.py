@@ -19,24 +19,6 @@ class BaseModel:
         if commit:
             connection.commit()
 
-    def update(self, connection: DatabaseClient, *, flush: bool = False, commit: bool = True, **data: Any):
-        for attr, new_value in data.items():
-            if not hasattr(self, attr):
-                raise ValueError(f"{self.__class__.__name__} as no attribute {attr} to update")
-            if new_value is not None:
-                setattr(self, attr, new_value)
-        if flush:
-            connection.flush()
-        if commit:
-            connection.commit()
-
-    def delete(self, connection: DatabaseClient, *, flush: bool = False, commit: bool = True):
-        connection.session.delete(self)
-        if flush:
-            connection.flush()
-        if commit:
-            connection.commit()
-
     def to_dict(self, *, exclude: Optional[list] = None, **include) -> dict:
         if not exclude:
             exclude = []

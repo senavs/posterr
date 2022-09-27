@@ -24,17 +24,8 @@ class DatabaseClient:
         if commit:
             self.commit()
 
-    def delete(self, *obj: DeclarativeBase, commit: Optional[bool] = True):
-        for instance in obj:
-            self.session.delete(instance)
-        if commit:
-            self.commit()
-
     def commit(self):
         self.session.commit()
-
-    def flush(self):
-        self.session.flush()
 
     def rollback(self):
         self.session.rollback()

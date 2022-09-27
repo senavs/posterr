@@ -66,8 +66,7 @@ def create_post(user_id: int, content: str, *, connection: DatabaseClient = None
         verify_daily_post_limit(user_id)
 
         post = Post(USER_ID=user_id, CONTENT=content)
-        connection.add(post)
-        connection.commit()
+        post.insert(connection)
 
         return post.to_dict()
 
@@ -84,8 +83,7 @@ def repost_post(user_id: int, post_id: int, *, connection: DatabaseClient = None
             raise HTTPException(HTTP_400_BAD_REQUEST, f"you cannot repost a reposted post. try to repost the original one")
 
         post = Post(USER_ID=user_id, REPOSTED=True, RELATED_POST_ID=post_id)
-        connection.add(post)
-        connection.commit()
+        post.insert(connection)
 
         return post.to_dict()
 
@@ -102,7 +100,6 @@ def quote_post(user_id: int, post_id: int, content: str, *, connection: Database
             raise HTTPException(HTTP_400_BAD_REQUEST, f"you cannot quote a quoted post. try to quote the original one")
 
         post = Post(USER_ID=user_id, CONTENT=content, QUOTED=True, RELATED_POST_ID=post_id)
-        connection.add(post)
-        connection.commit()
+        post.insert(connection)
 
         return post.to_dict()
