@@ -83,6 +83,20 @@ TOTAL                         330      8    98%
 
 
 ## Critique
+What could be improved?
+
+- Code:
+  - Implement unit tests. Since the idea was to test the whole application functionality, only integration (e2e) tests were created.
+  - Comment code functions and each swagger http method.
+  - Use raw SQL queries instead of SQLAlchemy query objects to increase performance.
+
+- Architecture:
+  - A full cloud native application, instead of one machine hosting the whole service.
+  - Add an API Gateway to route, authenticate and cache the requests.
+  - Even if it was deployed using AWS Lambdas or AWS EC2, for example, add a load balance to scale the application when needed
+  - Implement a server side cache to not query the database each search request.
+  - Change the database to a NoSQL database to increase performance and scalability.
+  - Depending on how big was the database, implement a Data Warehouse to search and query posts efficiently.
 
 ## Links:
 - [Requirements](https://onstrider.notion.site/Strider-Web-Back-end-Assessment-3-0-9dc16f041f5e4ac3913146bd7a8467c7)
